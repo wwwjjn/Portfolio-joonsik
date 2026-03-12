@@ -71,7 +71,7 @@ export const profile: Profile = {
   email: "njs121956@gmail.com",
   cvLabel: "Download CV",
   cvHref: "#",
-  heroImageSrc: "/joonsik.png",
+  heroImageSrc: "joonsik.png",
 };
 
 export const highlights: Highlight[] = [];

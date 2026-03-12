@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   contactLinks,
   cvEntries,
@@ -55,13 +54,12 @@ export default function Home() {
           <div className="space-y-8">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-12">
               <div className="group shrink-0">
-                <div className="relative h-56 w-56 overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[linear-gradient(135deg,_rgba(15,118,110,0.16),_rgba(245,158,11,0.2))] shadow-[0_20px_42px_rgba(15,23,42,0.1)] sm:h-64 sm:w-64">
+                  <div className="relative h-56 w-56 overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[linear-gradient(135deg,_rgba(15,118,110,0.16),_rgba(245,158,11,0.2))] shadow-[0_20px_42px_rgba(15,23,42,0.1)] sm:h-64 sm:w-64">
                   {profile.heroImageSrc ? (
-                    <Image
+                    <img
                       src={profile.heroImageSrc}
                       alt={`${profile.name} profile photo`}
-                      fill
-                      className="object-cover"
+                      className="h-full w-full object-cover"
                     />
                   ) : (
                     <span className="flex h-full w-full items-center justify-center text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink-strong)]">
