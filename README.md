@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Academic Portfolio Starter
 
-## Getting Started
+Single-page bilingual `Next.js` portfolio template for `CV`, `papers`, and `selected projects`, prepared for `GitHub Pages` deployment.
 
-First, run the development server:
+## Stack
+
+- `Next.js` App Router
+- `TypeScript`
+- `Tailwind CSS`
+- Static export for `GitHub Pages`
+- `GitHub Actions` deployment
+
+## Local development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Edit your content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Replace placeholder content in:
 
-## Learn More
+- `src/data/portfolio.ts`
 
-To learn more about Next.js, take a look at the following resources:
+This file holds:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Korean and English copy
+- CV entries
+- Paper entries and button links
+- Project cards
+- Contact links
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## GitHub Pages deployment
 
-## Deploy on Vercel
+1. Push this project to a GitHub repository.
+2. In GitHub, enable `Pages` and set the source to `GitHub Actions`.
+3. Push to `main`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The workflow builds a static export and deploys it automatically.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For repository-based Pages URLs, the app reads `GITHUB_REPOSITORY` during CI and sets the correct `basePath` automatically.
+
+## Useful commands
+
+```bash
+npm run lint
+npm run build
+```
