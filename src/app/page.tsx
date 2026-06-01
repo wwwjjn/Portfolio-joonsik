@@ -1,12 +1,95 @@
+"use client";
+
 import {
   contactLinks,
   cvEntries,
   highlights,
-  papers,
   profile,
   projects,
   uiText,
 } from "@/data/portfolio";
+import Image from "next/image";
+import { useState, type ReactNode } from "react";
+
+type SectionId = "cv" | "publications" | "projects" | "contact";
+
+type PublicationItem = {
+  title: string;
+  imageSrc?: string;
+  submittedTo: string;
+  authors: string;
+  links?: {
+    label: string;
+    href: string;
+  }[];
+};
+
+type PublicationGroup = {
+  id: "international" | "domestic";
+  title: "International Paper" | "Domestic Paper";
+  buttonLabel: "International" | "Domestic";
+  description: string;
+  items: PublicationItem[];
+};
+
+// 섹션 위치를 바꾸거나 새 섹션을 끼워 넣고 싶으면 이 배열 순서를 수정하세요.
+// 새 폴더/컴포넌트를 만들 경우 SectionId에 이름을 추가하고 renderSection에 연결하면 됩니다.
+const PAGE_SECTIONS: SectionId[] = [
+  "cv",
+  "publications",
+  "projects",
+  "contact",
+];
+
+const publicationGroups: PublicationGroup[] = [
+  {
+    id: "international",
+    title: "International Paper",
+    buttonLabel: "International",
+    description: "Conference and journal papers published outside Korea.",
+    items: [
+      {
+        title: "TRiGS: Temporal Rigid-Body Motion for Scalable 4D Gaussian Splatting",
+        imageSrc: "/papers/TRiGS.jpg",
+        submittedTo: "",
+        authors: "*Suwoong Yeom, *Joonsik Nam, *Seunggyu Choi, Lucas Yunkyu Lee, Sangmin Kim, Jaesik Park, Joonsoo Kim, Kugjin Yun, Kyeongbo Kong, Sukju Kang",
+        links: [
+          {
+            label: "Arxiv",
+            href: "https://arxiv.org/abs/2310.00000",
+          },
+        ],
+      },
+      {
+        title: "OriCache: Orientation-Guided Feature Caching for DiT Acceleration",
+        imageSrc: "/papers/OriCache.png",
+        submittedTo: "ICML 2026 AdaptFM Workshop",
+        authors: "*Joonsik Nam, Hyunwoo Yu, Sukju Kang",
+      },
+    ],
+    
+  },
+  {
+    id: "domestic",
+    title: "Domestic Paper",
+    buttonLabel: "Domestic",
+    description: "Korean conference and journal papers.",
+    items: [ 
+      {
+        title: "HSVT: Hierarchical Spiking Vision Transformer with Temporal Modulation",
+        imageSrc: "/papers/HSVT.png",
+        submittedTo: "AISP 2025 [인공지능신호처리학술대회 2025]",
+        authors: "*JoonSik Nam, HyunWoo Yu, SukJu Kang",
+      },
+      {
+        title: "AlignCache: Directional Alignment-Based Feature Caching for DiT",
+        imageSrc: "/papers/AlignCache.jpg",
+        submittedTo: "Summer Annual Conference of IEIE, 2026 [하계대한전자공학회 2026]",
+        authors: "*JoonSik Nam, HyunWoo Yu, SukJu Kang",
+      }
+     ],
+  },
+];
 
 function SectionHeader({
   eyebrow,
@@ -18,275 +101,420 @@ function SectionHeader({
   body: string;
 }) {
   return (
-    <div className="max-w-2xl space-y-3">
-      <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--accent-strong)] sm:text-xs">
+    <div className="space-y-3">
+      <p className="font-mono text-[0.72rem] font-medium uppercase tracking-[0.18em] text-[var(--accent-strong)]">
         {eyebrow}
       </p>
-      <h2 className="text-[clamp(1.75rem,3vw,2.5rem)] font-semibold tracking-tight text-[var(--ink-strong)]">
+      <h2 className="max-w-2xl text-2xl font-semibold tracking-tight text-[var(--ink-strong)] sm:text-3xl">
         {title}
       </h2>
-      <p className="text-[clamp(0.98rem,1.5vw,1.125rem)] leading-[1.8] text-[var(--ink-soft)]">
+      <p className="max-w-2xl text-[0.98rem] leading-7 text-[var(--ink-soft)]">
         {body}
       </p>
     </div>
   );
 }
 
+function PageSection({
+  id,
+  eyebrow,
+  title,
+  body,
+  children,
+}: {
+  id: SectionId;
+  eyebrow: string;
+  title: string;
+  body: string;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      id={id}
+      className="space-y-8 rounded-lg border border-[var(--line-strong)] bg-[var(--card-surface)] p-6 shadow-[0_18px_45px_rgba(17,17,15,0.05)] sm:p-8"
+    >
+      <SectionHeader eyebrow={eyebrow} title={title} body={body} />
+      {children}
+    </section>
+  );
+}
+
+function TextLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center gap-2 border-b border-[var(--line-strong)] pb-1 text-sm font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)]"
+    >
+      {children}
+      <span aria-hidden="true">-&gt;</span>
+    </a>
+  );
+}
+
+function LinkButton({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center justify-center rounded-md border border-[var(--accent-strong)] bg-[var(--accent-soft)] px-4 py-2 text-sm font-semibold text-[var(--accent-strong)] transition hover:bg-[var(--accent-strong)] hover:text-white"
+    >
+      {children}
+    </a>
+  );
+}
+
+function Authors({ value }: { value: string }) {
+  const parts = value.split(/(Joon-?sik Nam)/i);
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        /^Joon-?sik Nam$/i.test(part) ? (
+          <span
+            key={`${part}-${index}`}
+            className="font-bold underline decoration-[var(--accent-strong)] decoration-2 underline-offset-4"
+          >
+            {part}
+          </span>
+        ) : (
+          <span key={`${part}-${index}`}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function Highlights() {
+  if (highlights.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="grid gap-4 sm:grid-cols-3">
+      {highlights.map((item, index) => (
+        <div
+          key={`${item.label}-${index}`}
+          className="border-t border-[var(--line-strong)] pt-4"
+        >
+          <p className="text-3xl font-semibold tracking-tight text-[var(--ink-strong)]">
+            {item.value}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[var(--ink-soft)]">
+            {item.label}
+          </p>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function CvSection() {
+  return (
+    <PageSection
+      id="cv"
+      eyebrow="01"
+      title={uiText.cvTitle}
+      body={uiText.cvBody}
+    >
+      <div className="space-y-8">
+        {cvEntries.map((entry) => (
+          <article
+            key={`${entry.title}-${entry.period}`}
+            className="grid gap-3 border-l border-[var(--line-strong)] pl-5 sm:grid-cols-[150px_1fr] sm:gap-8 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-5"
+          >
+            <div>
+              <p className="font-mono text-xs font-medium uppercase tracking-[0.08em] text-[var(--accent-strong)]">
+                {entry.period}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold tracking-tight text-[var(--ink-strong)]">
+                {entry.title}
+              </h3>
+              <p className="leading-7 text-[var(--ink-soft)]">
+                {entry.description}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </PageSection>
+  );
+}
+
+function PublicationsSection() {
+  const [activeGroupId, setActiveGroupId] =
+    useState<PublicationGroup["id"]>("international");
+  const activeGroup =
+    publicationGroups.find((group) => group.id === activeGroupId) ??
+    publicationGroups[0];
+
+  return (
+    <PageSection
+      id="publications"
+      eyebrow="02"
+      title={uiText.papersTitle}
+      body={uiText.papersBody}
+    >
+      <div className="space-y-7">
+        <div className="flex flex-wrap gap-3 border-t border-[var(--line-strong)] pt-5">
+          {publicationGroups.map((group) => {
+            const isActive = group.id === activeGroupId;
+
+            return (
+              <button
+                key={group.id}
+                type="button"
+                onClick={() => setActiveGroupId(group.id)}
+                className={[
+                  "inline-flex rounded-md border px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.14em] transition",
+                  isActive
+                    ? "border-[var(--accent-strong)] bg-[var(--accent-strong)] text-white"
+                    : "border-[var(--line-strong)] bg-[var(--paper)] text-[var(--ink-strong)] hover:border-[var(--accent-strong)]",
+                ].join(" ")}
+                aria-pressed={isActive}
+              >
+                {group.buttonLabel}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="space-y-5">
+          <div>
+            <h3 className="text-xl font-semibold tracking-tight text-[var(--ink-strong)]">
+              {activeGroup.title}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-[var(--ink-soft)]">
+              {activeGroup.description}
+            </p>
+          </div>
+
+          {activeGroup.items.length > 0 ? (
+            <div className="space-y-4">
+              {activeGroup.items.map((paper) => (
+                <article
+                  key={`${activeGroup.title}-${paper.title}`}
+                  className="grid gap-6 rounded-md border border-[var(--line)] bg-[var(--paper)] p-4 sm:grid-cols-[260px_1fr]"
+                >
+                  <div className="flex items-center justify-center overflow-hidden rounded-md border border-[var(--line)] bg-white p-2">
+                    {paper.imageSrc ? (
+                      <Image
+                        src={paper.imageSrc}
+                        alt={`${paper.title} thumbnail`}
+                        width={520}
+                        height={360}
+                        className="h-auto max-h-64 w-full object-contain"
+                      />
+                    ) : (
+                      <div className="flex min-h-40 w-full items-center justify-center font-mono text-xs uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+                        Paper
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="font-mono text-sm font-semibold tracking-normal text-[var(--accent-strong)]">
+                      {paper.submittedTo}
+                    </p>
+                    <h4 className="text-xl font-semibold tracking-tight text-[var(--ink-strong)]">
+                      {paper.title}
+                    </h4>
+                    <p className="text-sm leading-6 text-[var(--ink-faint)]">
+                      <Authors value={paper.authors} />
+                    </p>
+
+                    {paper.links && paper.links.length > 0 ? (
+                      <div className="mt-5 flex flex-wrap gap-4">
+                        {paper.links.map((link) => (
+                          <LinkButton key={`${paper.title}-${link.label}`} href={link.href}>
+                            {link.label}
+                          </LinkButton>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="rounded-md border border-[var(--line)] bg-[var(--paper)] p-4 leading-7 text-[var(--ink-faint)]">
+              {uiText.emptyPapers}
+            </p>
+          )}
+        </div>
+      </div>
+    </PageSection>
+  );
+}
+
+function ProjectsSection() {
+  return (
+    <PageSection
+      id="projects"
+      eyebrow="03"
+      title={uiText.projectsTitle}
+      body={uiText.projectsBody}
+    >
+      <div className="space-y-7">
+        {projects.map((project) => (
+          <article
+            key={project.title}
+            className="border-t border-[var(--line-strong)] pt-5"
+          >
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.08em] text-[var(--accent-strong)]">
+              {project.period}
+            </p>
+            <h3 className="mt-3 text-xl font-semibold tracking-tight text-[var(--ink-strong)]">
+              {project.title}
+            </h3>
+            <p className="mt-3 leading-7 text-[var(--ink-soft)]">
+              {project.description}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-x-3 gap-y-2">
+              {project.stack.map((item) => (
+                <span
+                  key={`${project.title}-${item}`}
+                  className="font-mono text-xs text-[var(--ink-faint)]"
+                >
+                  #{item}
+                </span>
+              ))}
+            </div>
+            {project.href ? (
+              <div className="mt-5">
+                <TextLink href={project.href}>{uiText.projectLink}</TextLink>
+              </div>
+            ) : null}
+          </article>
+        ))}
+      </div>
+    </PageSection>
+  );
+}
+
+function ContactSection() {
+  return (
+    <PageSection
+      id="contact"
+      eyebrow="04"
+      title={uiText.contactTitle}
+      body={uiText.contactBody}
+    >
+      <div className="flex flex-col items-start gap-4 border-t border-[var(--line-strong)] pt-5 sm:flex-row sm:flex-wrap">
+        <a
+          href={`mailto:${profile.email}`}
+          className="inline-flex border-b border-[var(--ink-strong)] pb-1 text-sm font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)]"
+        >
+          {uiText.emailLabel}
+        </a>
+        {contactLinks.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            className="inline-flex border-b border-[var(--line-strong)] pb-1 text-sm font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)]"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </PageSection>
+  );
+}
+
+function renderSection(section: SectionId) {
+  switch (section) {
+    case "cv":
+      return <CvSection key={section} />;
+    case "publications":
+      return <PublicationsSection key={section} />;
+    case "projects":
+      return <ProjectsSection key={section} />;
+    case "contact":
+      return <ContactSection key={section} />;
+  }
+}
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
-      <div className="relative isolate overflow-hidden">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(circle_at_top_left,_rgba(15,118,110,0.22),_transparent_38%),radial-gradient(circle_at_top_right,_rgba(245,158,11,0.18),_transparent_32%),linear-gradient(180deg,_#f8fbfb_0%,_#f3f7f9_48%,_#eef4f4_100%)]" />
-
-        <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 sm:px-8">
+      <div className="border-b border-[var(--line)] bg-[var(--paper)]">
+        <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
           <a
             href="#top"
-            className="text-[0.72rem] font-semibold tracking-[0.28em] text-[var(--ink-strong)] uppercase sm:text-sm"
+            className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-[var(--ink-strong)]"
           >
-            {profile.name}
+            {profile.name || "Nam Joon-Sik"}
           </a>
         </header>
 
         <section
           id="top"
-          className="mx-auto w-full max-w-6xl px-6 pb-18 pt-10 sm:px-8 lg:pb-24 lg:pt-16"
+          className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1fr_340px] lg:items-end lg:py-24"
         >
-          <div className="space-y-8">
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-12">
-              <div className="group shrink-0">
-                  <div className="relative h-56 w-56 overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[linear-gradient(135deg,_rgba(15,118,110,0.16),_rgba(245,158,11,0.2))] shadow-[0_20px_42px_rgba(15,23,42,0.1)] sm:h-64 sm:w-64">
-                  {profile.heroImageSrc ? (
-                    <img
-                      src={profile.heroImageSrc}
-                      alt={`${profile.name} profile photo`}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <span className="flex h-full w-full items-center justify-center text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink-strong)]">
-                      Photo
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-5">
-                <p className="text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-[var(--accent-strong)] sm:text-sm">
-                  {profile.role}
-                </p>
-                <h1 className="display-face max-w-4xl text-[clamp(2.9rem,6vw,4.9rem)] font-semibold leading-[0.96] tracking-tight text-[var(--ink-strong)]">
-                  {profile.tagline}
-                </h1>
-                <p className="max-w-2xl text-[clamp(1rem,1.6vw,1.18rem)] leading-[1.85] text-[var(--ink-soft)]">
-                  {profile.summary}
-                </p>
-                <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:flex-wrap">
-                  <a
-                    href="#papers"
-                    className="inline-flex items-center justify-center rounded-full border border-[var(--line-strong)] bg-white/80 px-6 py-3 text-[0.95rem] font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)]"
-                  >
-                    {uiText.papersLink}
-                  </a>
-                  <a
-                    href="#projects"
-                    className="inline-flex items-center justify-center rounded-full border border-[var(--line-strong)] bg-white/80 px-6 py-3 text-[0.95rem] font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)]"
-                  >
-                    {uiText.projectsLink}
-                  </a>
-                  <a
-                    href={`mailto:${profile.email}`}
-                    className="inline-flex items-center justify-center rounded-full border border-[var(--line-strong)] bg-white/80 px-6 py-3 text-[0.95rem] font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)]"
-                  >
-                    {uiText.emailLabel}
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              {highlights.map((item, index) => (
-                <div
-                  key={`${item.label}-${index}`}
-                  className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-4 transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-strong)] hover:bg-white hover:shadow-[0_18px_34px_rgba(15,23,42,0.08)]"
-                >
-                  <p className="text-[clamp(1.9rem,3vw,2.4rem)] font-semibold tracking-tight text-[var(--ink-strong)]">
-                    {item.value}
-                  </p>
-                  <p className="mt-2 text-[0.92rem] leading-6 text-[var(--ink-soft)]">
-                    {item.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 py-12 sm:px-8 sm:py-18">
-        <section id="about" className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <SectionHeader
-            eyebrow="01"
-            title={uiText.aboutTitle}
-            body={uiText.aboutBody}
-          />
-          <div className="flex min-h-full items-center rounded-[2rem] border border-[var(--line)] bg-[var(--card)] p-8 shadow-[0_18px_40px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-2 hover:border-[var(--accent-strong)] hover:bg-white hover:shadow-[0_26px_54px_rgba(15,23,42,0.1)]">
-            <p className="text-[clamp(1rem,1.6vw,1.16rem)] leading-[1.85] text-[var(--ink-soft)]">
-              {profile.summary}
+          <div className="max-w-3xl space-y-7">
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-[var(--accent-strong)]">
+              {profile.role}
             </p>
+            <div className="space-y-5">
+              <h1 className="text-4xl font-semibold leading-[1.04] tracking-tight text-[var(--ink-strong)] sm:text-6xl">
+                {profile.tagline}
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-[var(--ink-soft)]">
+                {profile.summary}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-5 pt-2">
+              <TextLink href="#cv">{uiText.cvTitle}</TextLink>
+              <TextLink href="#projects">{uiText.projectsLink}</TextLink>
+              <TextLink href={`mailto:${profile.email}`}>{uiText.emailLabel}</TextLink>
+            </div>
           </div>
-        </section>
 
-        <section id="cv" className="space-y-10">
-          <SectionHeader
-            eyebrow="02"
-            title={uiText.cvTitle}
-            body={uiText.cvBody}
-          />
-
-          <div className="grid gap-5">
-            {cvEntries.map((entry) => (
-              <article
-                key={`${entry.title}-${entry.period}`}
-                className="grid gap-5 rounded-[2rem] border border-[var(--line)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-2 hover:border-[var(--accent-strong)] hover:shadow-[0_28px_60px_rgba(15,23,42,0.12)] lg:grid-cols-[minmax(210px,0.28fr)_1fr] lg:gap-8"
-              >
-                <div className="flex items-center lg:min-h-full">
-                  <p className="whitespace-nowrap text-[0.76rem] font-semibold uppercase tracking-[0.12em] text-[var(--accent-strong)] sm:text-[0.84rem] lg:text-[0.92rem]">
-                    {entry.period}
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <h3 className="text-[clamp(1.45rem,2vw,1.9rem)] font-semibold tracking-tight text-[var(--ink-strong)]">
-                    {entry.title}
-                  </h3>
-                  <p className="max-w-3xl text-[clamp(0.98rem,1.3vw,1.08rem)] leading-[1.8] text-[var(--ink-soft)]">
-                    {entry.description}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="papers" className="space-y-10">
-          <SectionHeader
-            eyebrow="03"
-            title={uiText.papersTitle}
-            body={uiText.papersBody}
-          />
-
-          <div className="grid gap-6 xl:grid-cols-2">
-            {papers.map((paper) => (
-              <article
-                key={`${paper.title}-${paper.year}`}
-                className="rounded-[2rem] border border-[var(--line)] bg-[var(--card)] p-7 shadow-[0_18px_40px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-2 hover:border-[var(--accent-strong)] hover:bg-white hover:shadow-[0_28px_60px_rgba(15,23,42,0.12)]"
-              >
-                <div className="flex flex-wrap items-center gap-3 text-[0.9rem] text-[var(--ink-faint)]">
-                  <span>{paper.venue}</span>
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                  <span>{paper.year}</span>
-                </div>
-                <h3 className="mt-4 text-[clamp(1.45rem,2vw,1.9rem)] font-semibold tracking-tight text-[var(--ink-strong)]">
-                  {paper.title}
-                </h3>
-                <p className="mt-3 text-[0.92rem] leading-6 text-[var(--ink-faint)]">
-                  {paper.authors}
-                </p>
-                <p className="mt-4 text-[clamp(0.98rem,1.3vw,1.08rem)] leading-[1.8] text-[var(--ink-soft)]">
-                  {paper.abstract}
-                </p>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  {paper.links.map((link) => (
-                    <a
-                      key={`${paper.title}-${link.label}`}
-                      href={link.href}
-                      className="inline-flex items-center justify-center rounded-full border border-[var(--line-strong)] px-4 py-2 text-[0.9rem] font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:bg-[var(--accent-soft)]"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="projects" className="space-y-10">
-          <SectionHeader
-            eyebrow="04"
-            title={uiText.projectsTitle}
-            body={uiText.projectsBody}
-          />
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            {projects.map((project) => (
-              <article
-                key={project.title}
-                className="flex h-full flex-col rounded-[2rem] border border-[var(--line)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-2 hover:border-[var(--accent-strong)] hover:shadow-[0_28px_60px_rgba(15,23,42,0.12)]"
-              >
-                <p className="text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[var(--accent-strong)] sm:text-sm">
-                  {project.period}
-                </p>
-                <h3 className="mt-4 text-[clamp(1.45rem,2vw,1.9rem)] font-semibold tracking-tight text-[var(--ink-strong)]">
-                  {project.title}
-                </h3>
-                <p className="mt-4 flex-1 text-[clamp(0.98rem,1.3vw,1.08rem)] leading-[1.8] text-[var(--ink-soft)]">
-                  {project.description}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {project.stack.map((item) => (
-                    <span
-                      key={`${project.title}-${item}`}
-                      className="rounded-full bg-[var(--accent-soft)] px-3 py-1 text-[0.86rem] text-[var(--accent-strong)]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-                {project.href ? (
-                  <a
-                    href={project.href}
-                    className="mt-6 inline-flex text-[0.95rem] font-semibold text-[var(--ink-strong)] transition hover:text-[var(--accent-strong)]"
-                  >
-                    {uiText.projectLink}
-                  </a>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section
-          id="contact"
-          className="rounded-[2.25rem] border border-[var(--line)] bg-[linear-gradient(135deg,_rgba(255,255,255,0.92),_rgba(240,250,249,0.95))] p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-2 hover:border-[var(--accent-strong)] hover:shadow-[0_30px_60px_rgba(15,23,42,0.12)] sm:p-10"
-        >
-          <SectionHeader
-            eyebrow="05"
-            title={uiText.contactTitle}
-            body={uiText.contactBody}
-          />
-
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center justify-center rounded-full bg-[var(--ink-strong)] px-5 py-3 text-[0.95rem] font-semibold text-white transition hover:bg-[var(--accent-strong)]"
-            >
-              {uiText.emailLabel}
-            </a>
-            {contactLinks.map((link) => (
+          <aside className="space-y-5 border-t border-[var(--line)] pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            <div className="aspect-[4/5] w-full max-w-[280px] overflow-hidden bg-[var(--card)] sm:max-w-[320px] lg:max-w-none">
+              {profile.heroImageSrc ? (
+                <Image
+                  src={profile.heroImageSrc}
+                  alt={`${profile.name || "Nam Joon-Sik"} profile photo`}
+                  width={680}
+                  height={850}
+                  priority
+                  className="h-full w-full object-cover"
+                />
+              ) : null}
+            </div>
+            <div className="space-y-2 text-sm leading-6 text-[var(--ink-soft)]">
+              <p>{profile.location}</p>
               <a
-                key={link.label}
-                href={link.href}
-                className="inline-flex items-center justify-center rounded-full border border-[var(--line-strong)] px-5 py-3 text-[0.95rem] font-semibold text-[var(--ink-strong)] transition hover:border-[var(--accent-strong)] hover:bg-white"
+                href={`mailto:${profile.email}`}
+                className="text-[var(--ink-strong)] transition hover:text-[var(--accent-strong)]"
               >
-                {link.label}
+                {profile.email}
               </a>
-            ))}
-          </div>
+            </div>
+          </aside>
         </section>
       </div>
 
-      <footer className="border-t border-[var(--line)] px-6 py-8 text-center text-[0.9rem] text-[var(--ink-faint)] sm:px-8">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-20 px-5 py-14 sm:px-8 sm:py-20">
+        <Highlights />
+        <div className="space-y-8">{PAGE_SECTIONS.map(renderSection)}</div>
+      </div>
+
+      <footer className="border-t border-[var(--line)] px-5 py-8 text-center font-mono text-xs text-[var(--ink-faint)] sm:px-8">
         {new Date().getFullYear()} {uiText.copy}
       </footer>
     </main>

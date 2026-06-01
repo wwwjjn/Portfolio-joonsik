@@ -26,20 +26,6 @@ export type CvEntry = {
   description: string;
 };
 
-export type PaperLink = {
-  label: string;
-  href: string;
-};
-
-export type Paper = {
-  title: string;
-  venue: string;
-  year: string;
-  authors: string;
-  abstract: string;
-  links: PaperLink[];
-};
-
 export type Project = {
   title: string;
   period: string;
@@ -62,19 +48,23 @@ export const navItems: NavItem[] = [
 ];
 
 export const profile: Profile = {
-  name: "",
+  name: "Nam Joon-Sik",
   role: "Integrated M.S./Ph.D. Student at VDSLab",
-  tagline: "Hi, I'm Joon-Sik Nam ",
+  tagline: "Researching efficient visual AI systems.",
   summary:
-    "I am currently pursuing an integrated M.S./Ph.D. program at VDSLab.",
+    "I am an integrated M.S./Ph.D. student at Sogang University, working with VDSLab on visual deep learning systems and practical model efficiency.",
   location: "Seoul, South Korea",
   email: "njs121956@gmail.com",
   cvLabel: "Download CV",
   cvHref: "#",
-  heroImageSrc: "joonsik.png",
+  heroImageSrc: "/joonsik.png",
 };
 
-export const highlights: Highlight[] = [];
+export const highlights: Highlight[] = [
+  { value: "VDSLab", label: "Video Display Systems Lab" },
+  { value: "2025-", label: "Integrated M.S./Ph.D. program at Sogang University" },
+  { value: "Seoul", label: "Based in South Korea" },
+];
 
 export const cvEntries: CvEntry[] = [
   {
@@ -91,62 +81,13 @@ export const cvEntries: CvEntry[] = [
   },
 ];
 
-export const papers: Paper[] = [
-  {
-    title: "Paper Title Placeholder",
-    venue: "Conference / Journal Name",
-    year: "2026",
-    authors: "Your Name, Coauthor A, Coauthor B",
-    abstract:
-      "Use two or three sentences to summarize the problem, the proposed method, and the main result.",
-    links: [
-      { label: "View Paper", href: "#" },
-      { label: "PDF", href: "#" },
-      { label: "Code", href: "#" },
-    ],
-  },
-  // {
-  //   title: "Paper Title Placeholder: Efficient Representation Learning with Limited Labels",
-  //   venue: "Conference / Journal Name",
-  //   year: "2025",
-  //   authors: "Your Name, Coauthor A",
-  //   abstract:
-  //     "Example summary for work improving performance or efficiency under limited supervision.",
-  //   links: [
-  //     { label: "DOI", href: "#" },
-  //     { label: "Poster", href: "#" },
-  //   ],
-  // },
-  // {
-  //   title: "Paper Title Placeholder: Human-Centered Evaluation of Interactive AI",
-  //   venue: "Workshop / Journal Name",
-  //   year: "2024",
-  //   authors: "Your Name, Coauthor A, Coauthor B, Coauthor C",
-  //   abstract:
-  //     "Placeholder copy for human-centered or interaction-oriented research contributions.",
-  //   links: [
-  //     { label: "View Paper", href: "#" },
-  //     { label: "Slides", href: "#" },
-  //   ],
-  // },
-  // {
-  //   title: "Paper Title Placeholder: Applied Systems Research for Production Deployment",
-  //   venue: "Journal / Technical Report",
-  //   year: "2023",
-  //   authors: "Your Name, Coauthor A",
-  //   abstract:
-  //     "Placeholder summary for work that demonstrates production-facing systems research.",
-  //   links: [{ label: "Technical Report", href: "#" }],
-  // },
-];
-
 export const projects: Project[] = [
   {
-    title: "Research Toolkit",
+    title: "Experiment automation toolkit",
     period: "2025",
     description:
-      "A placeholder internal toolkit for experiment automation, tracking, and reproducible workflows.",
-    stack: ["Python"],
+      "Internal scripts and utilities for running repeatable model experiments, comparing outputs, and organizing research artifacts.",
+    stack: ["Python", "Research tooling"],
     href: "#",
   },
   // {
@@ -168,25 +109,26 @@ export const projects: Project[] = [
 
 export const contactLinks: ContactLink[] = [
   { label: "GitHub", href: "https://github.com/wwwjjn" },
-  { label: "Google Scholar", href: "#" },
+  { label: "Google Scholar", href: "https://scholar.google.com/citations?hl=ko&user=sWHQ5rAAAAAJ" },
   { label: "LinkedIn", href: "#" },
 ];
 
 export const uiText = {
   heroLabel: "Academic Portfolio",
-  aboutTitle: "An introduction that combines research and implementation",
-  aboutBody: "This page keeps your CV, papers, and projects in one flow for quick review.",
+  aboutTitle: "Research profile",
+  aboutBody: "A concise overview of current academic direction and implementation work.",
   cvTitle: "CV Highlights",
-  cvBody: "The current version reflects your academic timeline.",
-  papersTitle: "Papers",
-  papersBody: "Each paper is paired with direct-action buttons for quick access.",
+  cvBody: "Academic timeline and current affiliation.",
+  papersTitle: "Publications",
+  papersBody: "Public papers and manuscripts will be collected here as they become available.",
+  emptyPapers: "No public paper links are available yet.",
   projectsTitle: "Projects",
-  projectsBody: "Use this area to present implementation work or demos alongside your research.",
+  projectsBody: "Selected implementation work supporting research workflows and experiments.",
   contactTitle: "Contact",
-  contactBody: "Replace these placeholders with your real contact details and profile links.",
+  contactBody: "For research conversations, collaboration, or project details, email is the best first contact.",
   papersLink: "Papers",
   projectsLink: "Projects",
   emailLabel: "Email",
-  copy: "Portfolio template",
+  copy: "Nam Joon-Sik",
   projectLink: "View Project",
 } as const;
