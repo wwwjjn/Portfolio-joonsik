@@ -41,6 +41,16 @@ const PAGE_SECTIONS: SectionId[] = [
   "contact",
 ];
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+function publicAsset(path: string) {
+  if (!path.startsWith("/")) {
+    return path;
+  }
+
+  return `${basePath}${path}`;
+}
+
 const publicationGroups: PublicationGroup[] = [
   {
     id: "international",
@@ -56,8 +66,12 @@ const publicationGroups: PublicationGroup[] = [
         links: [
           {
             label: "Arxiv",
-            href: "https://arxiv.org/abs/2310.00000",
+            href: "https://arxiv.org/abs/2604.00538",
           },
+          {
+            label: "Project Page",
+            href: "https://wwwjjn.github.io/TRiGS-project_page/",
+          }
         ],
       },
       {
@@ -159,16 +173,56 @@ function TextLink({
 
 function LinkButton({
   href,
+  label,
   children,
 }: {
   href: string;
+  label: string;
   children: ReactNode;
 }) {
+  const variantClass =
+    label.toLowerCase() === "arxiv"
+      ? "border-[#efb5b5] bg-[#fff1f1] text-[#b65b5b] hover:border-[#d98d8d] hover:bg-[#ffe6e6]"
+      : label.toLowerCase() === "project page"
+        ? "border-[var(--line-strong)] bg-white text-[var(--ink-strong)] hover:border-[var(--accent-strong)] hover:bg-[var(--accent-soft)]"
+        : "border-[var(--accent-strong)] bg-[var(--accent-soft)] text-[var(--accent-strong)] hover:bg-[var(--accent-strong)] hover:text-white";
+  const isArxiv = label.toLowerCase() === "arxiv";
+
   return (
     <a
       href={href}
-      className="inline-flex items-center justify-center rounded-md border border-[var(--accent-strong)] bg-[var(--accent-soft)] px-4 py-2 text-sm font-semibold text-[var(--accent-strong)] transition hover:bg-[var(--accent-strong)] hover:text-white"
+      className={`inline-flex items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-semibold transition ${variantClass}`}
     >
+      {isArxiv ? (
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          className="h-4 w-4 shrink-0"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 1.75h5.25L12 4.5v9.75H4V1.75Z"
+            stroke="currentColor"
+            strokeLinejoin="round"
+            strokeWidth="1.25"
+          />
+          <path
+            d="M9.25 1.75V4.5H12"
+            stroke="currentColor"
+            strokeLinejoin="round"
+            strokeWidth="1.25"
+          />
+          <path
+            d="M5.75 7.25h4.5M5.75 9.5h4.5M5.75 11.75h2.75"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="1.25"
+          />
+        </svg>
+      ) : null}
       {children}
     </a>
   );
@@ -312,7 +366,7 @@ function PublicationsSection() {
                   <div className="flex items-center justify-center overflow-hidden rounded-md border border-[var(--line)] bg-white p-2">
                     {paper.imageSrc ? (
                       <Image
-                        src={paper.imageSrc}
+                        src={publicAsset(paper.imageSrc)}
                         alt={`${paper.title} thumbnail`}
                         width={520}
                         height={360}
@@ -339,7 +393,11 @@ function PublicationsSection() {
                     {paper.links && paper.links.length > 0 ? (
                       <div className="mt-5 flex flex-wrap gap-4">
                         {paper.links.map((link) => (
-                          <LinkButton key={`${paper.title}-${link.label}`} href={link.href}>
+                          <LinkButton
+                            key={`${paper.title}-${link.label}`}
+                            href={link.href}
+                            label={link.label}
+                          >
                             {link.label}
                           </LinkButton>
                         ))}
@@ -487,7 +545,7 @@ export default function Home() {
             <div className="aspect-[4/5] w-full max-w-[280px] overflow-hidden bg-[var(--card)] sm:max-w-[320px] lg:max-w-none">
               {profile.heroImageSrc ? (
                 <Image
-                  src={profile.heroImageSrc}
+                  src={publicAsset(profile.heroImageSrc)}
                   alt={`${profile.name || "Nam Joon-Sik"} profile photo`}
                   width={680}
                   height={850}
