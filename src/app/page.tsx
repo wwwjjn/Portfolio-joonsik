@@ -60,7 +60,7 @@ const publicationGroups: PublicationGroup[] = [
     items: [
       {
         title: "TRiGS: Temporal Rigid-Body Motion for Scalable 4D Gaussian Splatting",
-        imageSrc: "/papers/TRiGS.jpg",
+        imageSrc: "/papers/TRiGS.webp",
         submittedTo: "",
         authors: "*Suwoong Yeom, *Joonsik Nam, *Seunggyu Choi, Lucas Yunkyu Lee, Sangmin Kim, Jaesik Park, Joonsoo Kim, Kugjin Yun, Kyeongbo Kong, Sukju Kang",
         links: [
@@ -76,7 +76,7 @@ const publicationGroups: PublicationGroup[] = [
       },
       {
         title: "OriCache: Orientation-Guided Feature Caching for DiT Acceleration",
-        imageSrc: "/papers/OriCache.png",
+        imageSrc: "/papers/OriCache.webp",
         submittedTo: "ICML 2026 AdaptFM Workshop",
         authors: "*Joonsik Nam, Hyunwoo Yu, Sukju Kang",
       },
@@ -91,13 +91,13 @@ const publicationGroups: PublicationGroup[] = [
     items: [ 
       {
         title: "HSVT: Hierarchical Spiking Vision Transformer with Temporal Modulation",
-        imageSrc: "/papers/HSVT.png",
+        imageSrc: "/papers/HSVT.webp",
         submittedTo: "AISP 2025 [인공지능신호처리학술대회 2025]",
         authors: "*JoonSik Nam, HyunWoo Yu, SukJu Kang",
       },
       {
         title: "AlignCache: Directional Alignment-Based Feature Caching for DiT",
-        imageSrc: "/papers/AlignCache.jpg",
+        imageSrc: "/papers/AlignCache.webp",
         submittedTo: "Summer Annual Conference of IEIE, 2026 [하계대한전자공학회 2026]",
         authors: "*JoonSik Nam, HyunWoo Yu, SukJu Kang",
       }
