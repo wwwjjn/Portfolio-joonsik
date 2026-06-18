@@ -48,7 +48,7 @@ export const navItems: NavItem[] = [
 ];
 
 export const profile: Profile = {
-  name: "Nam Joon-Sik",
+  name: "Joonsik Nam",
   role: "Integrated M.S./Ph.D. Student at VDSLab",
   tagline: "Joonsik Nam",
   summary:
@@ -133,6 +133,6 @@ export const uiText = {
   papersLink: "Papers",
   projectsLink: "Projects",
   emailLabel: "Email",
-  copy: "Nam Joon-Sik",
+  copy: "Joonsik Nam",
   projectLink: "View Project",
 } as const;

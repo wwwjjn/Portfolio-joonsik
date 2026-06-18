@@ -102,13 +102,13 @@ const publicationGroups: PublicationGroup[] = [
         title: "AlignCache: Directional Alignment-Based Feature Caching for DiT",
         imageSrc: "/papers/AlignCache.webp",
         submittedTo: "Summer Annual Conference of IEIE, 2026 [하계대한전자공학회 2026]",
-        authors: "*JoonSik Nam, HyunWoo Yu, SukJu Kang",
+        authors: "*Joonsik Nam, HyunWoo Yu, SukJu Kang",
       },
       {
         title: "HSVT: Hierarchical Spiking Vision Transformer with Temporal Modulation",
         imageSrc: "/papers/HSVT.webp",
         submittedTo: "AISP 2025 [인공지능신호처리학술대회 2025]",
-        authors: "*JoonSik Nam, HyunWoo Yu, SukJu Kang",
+        authors: "*Joonsik Nam, HyunWoo Yu, SukJu Kang",
       }
      ],
   },
@@ -468,7 +468,7 @@ export default function Home() {
             href="#top"
             className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-[var(--ink-strong)]"
           >
-            {profile.name || "Nam Joon-Sik"}
+            {profile.name || "Joonsik Nam"}
           </a>
         </header>
 
@@ -510,7 +510,7 @@ export default function Home() {
               {profile.heroImageSrc ? (
                 <Image
                   src={publicAsset(profile.heroImageSrc)}
-                  alt={`${profile.name || "Nam Joon-Sik"} profile photo`}
+                  alt={`${profile.name || "Joonsik Nam"} profile photo`}
                   width={720}
                   height={960}
                   priority
