@@ -50,9 +50,9 @@ export const navItems: NavItem[] = [
 export const profile: Profile = {
   name: "Nam Joon-Sik",
   role: "Integrated M.S./Ph.D. Student at VDSLab",
-  tagline: "Researching efficient visual AI systems.",
+  tagline: "Joonsik Nam",
   summary:
-    "I am an integrated M.S./Ph.D. student at Sogang University, working with VDSLab on visual deep learning systems and practical model efficiency.",
+    "Integrated M.S./Ph.D. student at Sogang University (VDSLab), dedicated to advancing the efficiency and scalability of next-generation visual AI systems. My research spans Multi-modal LLMs, Diffusion Models, and 3D/4D Reconstruction, with the ultimate goal of deploying these advanced capabilities onto Edge devices. Open to academic collaboration and technical insights in deep learning optimization.",
   location: "Seoul, South Korea",
   email: "njs121956@gmail.com",
   cvLabel: "Download CV",
@@ -62,20 +62,20 @@ export const profile: Profile = {
 
 export const highlights: Highlight[] = [
   { value: "VDSLab", label: "Video Display Systems Lab" },
-  { value: "2025-", label: "Integrated M.S./Ph.D. program at Sogang University" },
+  { value: "2025.09 ~", label: "Integrated M.S./Ph.D. program at Sogang University" },
   { value: "Seoul", label: "Based in South Korea" },
 ];
 
 export const cvEntries: CvEntry[] = [
   {
     title: "Undergraduate",
-    period: "Mar 2019 - Aug 2025",
+    period: "2019.03 ~ 2025.08",
     description:
       "Completed undergraduate studies in Electronic Engineering at Sogang University.",
   },
   {
     title: "Integrated M.S./Ph.D. Program",
-    period: "Sep 2025 - Present",
+    period: "2025.09 ~",
     description:
       "Currently pursuing an integrated M.S./Ph.D. program at Sogang University.",
   },
@@ -83,12 +83,16 @@ export const cvEntries: CvEntry[] = [
 
 export const projects: Project[] = [
   {
-    title: "Experiment automation toolkit",
-    period: "2025",
-    description:
-      "Internal scripts and utilities for running repeatable model experiments, comparing outputs, and organizing research artifacts.",
-    stack: ["Python", "Research tooling"],
-    href: "#",
+    title: "NAVER 공동 연구",
+    period: "Jan 2026 ~",
+    description: "NAVER Cloud, Korea / 참여연구원",
+    stack: ["NAVER Cloud", "Collaborative Research"],
+  },
+  {
+    title: "ETRI 아날로그-디지털 혼성 초저전력 뉴로모픽 엣지 SOC 개발",
+    period: "Mar 2025 ~",
+    description: "ETRI, Korea / 참여연구원",
+    stack: ["Neuromorphic Edge SoC", "Low-power AI Hardware"],
   },
   // {
   //   title: "Interactive Demo Platform",
@@ -117,13 +121,13 @@ export const uiText = {
   heroLabel: "Academic Portfolio",
   aboutTitle: "Research profile",
   aboutBody: "A concise overview of current academic direction and implementation work.",
-  cvTitle: "CV Highlights",
-  cvBody: "Academic timeline and current affiliation.",
+  cvTitle: "Education",
+  cvBody: "",
   papersTitle: "Publications",
-  papersBody: "Public papers and manuscripts will be collected here as they become available.",
+  papersBody: "",
   emptyPapers: "No public paper links are available yet.",
   projectsTitle: "Projects",
-  projectsBody: "Selected implementation work supporting research workflows and experiments.",
+  projectsBody: "",
   contactTitle: "Contact",
   contactBody: "For research conversations, collaboration, or project details, email is the best first contact.",
   papersLink: "Papers",
